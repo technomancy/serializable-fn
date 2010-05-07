@@ -1,10 +1,13 @@
 (ns string-fn.core
+  "Serializable functions! Check it out."
   (:refer-clojure :exclude [fn]))
 
-(defmacro fn [& sigs]
+(defmacro ^{:doc (str (:doc (meta #'clojure.core/fn))
+                      "\n\n  Oh, but it also allows serialization!!!111eleven")}
+  fn [& sigs]
   `(with-meta (clojure.core/fn ~@sigs)
      {:type ::serializable-fn
-      ::source (quote (~'fn ~@sigs))}))
+      ::source (quote ~&form)}))
 
 (defmethod print-method ::serializable-fn [o ^Writer w]
   (print-method (::source (meta o)) w))

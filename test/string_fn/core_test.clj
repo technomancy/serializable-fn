@@ -21,5 +21,9 @@
   (is (= (pr-str dinc-list)
          (pr-str dinc))))
 
+(deftest preserve-reader-metadata
+  (is (number? (:line (meta (:string-fn.core/source
+                             (meta dinc)))))))
+
 (deftest serializable-fn-roundtrip!!!111eleven
   (is (= 2 ((eval (read-string (pr-str dinc))) 0))))
