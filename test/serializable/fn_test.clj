@@ -27,3 +27,7 @@
 
 (deftest serializable-fn-roundtrip!!!111eleven
   (is (= 2 ((eval (read-string (pr-str dinc))) 0))))
+
+(deftest serializable-roundtrip-with-lexical-context
+  (let [x 0]
+    (is (= 2 ((eval (read-string (pr-str (fn [] (dinc x))))))))))
