@@ -1,4 +1,4 @@
-(defproject serializable-fn "1.0.0-SNAPSHOT"
+(defproject serializable-fn "1.0.0"
   :url "http://github.com/technomancy/serializable-fn"
   :author "Seajure"
   :description "Make functions that have pretty representations."
