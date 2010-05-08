@@ -1,6 +1,6 @@
-(ns string-fn.core-test
+(ns serializable.fn-test
   (:refer-clojure :exclude [fn])
-  (:use [string-fn.core] :reload-all)
+  (:use [serializable.fn] :reload-all)
   (:use [clojure.test]))
 
 (def dinc-list '(fn [x] (inc (inc x))))
@@ -15,14 +15,14 @@
   (is (= 2 (dinc 0))))
 
 (deftest metadata-fns-return-source
-  (is (= dinc-list (:string-fn.core/source (meta dinc)))))
+  (is (= dinc-list (:serializable.fn/source (meta dinc)))))
 
 (deftest printing-fns-show-source
   (is (= (pr-str dinc-list)
          (pr-str dinc))))
 
 (deftest preserve-reader-metadata
-  (is (number? (:line (meta (:string-fn.core/source
+  (is (number? (:line (meta (:serializable.fn/source
                              (meta dinc)))))))
 
 (deftest serializable-fn-roundtrip!!!111eleven

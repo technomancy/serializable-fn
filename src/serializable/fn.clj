@@ -1,4 +1,4 @@
-(ns string-fn.core
+(ns serializable.fn
   "Serializable functions! Check it out."
   (:refer-clojure :exclude [fn]))
 
