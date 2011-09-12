@@ -2,10 +2,10 @@
   "Serializable functions! Check it out."
   (:refer-clojure :exclude [fn]))
 
-(defn- save-env [env form]
-  (if env
-    `(let ~(vec (flatten (for [[name local] env]
-                         [name (.v (.init local))])))
+(defn- save-env [bindings form]
+  (if bindings
+    `(let ~(vec (apply concat (for [b bindings]
+                                [(.sym b) (.eval (.init b))])))
        (~@form))
     form))
 
@@ -14,7 +14,7 @@
   fn [& sigs]
   `(with-meta (clojure.core/fn ~@sigs)
      {:type ::serializable-fn
-      ::source (quote ~(save-env &env &form))}))
+      ::source (quote ~(save-env (vals &env) &form))}))
 
 (defmethod print-method ::serializable-fn [o ^Writer w]
   (print-method (::source (meta o)) w))

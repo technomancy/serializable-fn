@@ -1,7 +1,7 @@
 (ns serializable.fn-test
   (:refer-clojure :exclude [fn])
-  (:use [serializable.fn] :reload-all)
-  (:use [clojure.test]))
+  (:use [serializable.fn]
+        [clojure.test]))
 
 (def dinc-list '(fn [x] (inc (inc x))))
 
@@ -29,5 +29,6 @@
   (is (= 2 ((eval (read-string (pr-str dinc))) 0))))
 
 (deftest serializable-roundtrip-with-lexical-context
-  (let [x 0]
-    (is (= 2 ((eval (read-string (pr-str (fn [] (dinc x))))))))))
+  (let [x 0, y (+ 95 4)]
+    (is (= [2 100]
+           ((eval (read-string (pr-str (fn [] [(dinc x) (inc y)])))))))))
