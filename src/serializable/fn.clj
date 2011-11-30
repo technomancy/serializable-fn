@@ -3,12 +3,15 @@
   (:refer-clojure :exclude [fn]))
 
 (defn- save-env [bindings form]
-  (if bindings
-    `(list `let ~(vec (apply concat (for [b bindings]
-                                      [`(quote ~(.sym b))
-                                       (.sym b)])))
-           '~form)
-    `'~form))
+  (let [form (with-meta (cons `fn (rest form)) ; serializable/fn, not core/fn
+               (meta form))
+        quoted-form `(quote ~form)]
+    (if bindings
+      `(list `let ~(vec (apply concat (for [b bindings]
+                                        [`(quote ~(.sym b))
+                                         (.sym b)])))
+             ~quoted-form)
+      quoted-form)))
 
 (defmacro ^{:doc (str (:doc (meta #'clojure.core/fn))
                       "\n\n  Oh, but it also allows serialization!!!111eleven")}
