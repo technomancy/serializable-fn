@@ -31,11 +31,6 @@
 (deftest serializable-fn-roundtrip!!!111eleven
   (is (= 2 (round-trip dinc 0))))
 
-(deftest serializable-roundtrip-with-lexical-context
-  (let [x 0, y (+ 95 4)]
-    (is (= [2 100]
-           (round-trip (fn [] [(dinc x) (inc y)]))))))
-
 (deftest roundtrip-with-lexical-nonconst-context
   (let [x 10, y (inc x)]
     (is (= 11
