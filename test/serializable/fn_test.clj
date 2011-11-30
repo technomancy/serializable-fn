@@ -3,7 +3,7 @@
   (:use [serializable.fn]
         [clojure.test]))
 
-(def dinc-list '(fn [x] (inc (inc x))))
+(def dinc-list '(serializable.fn/fn [x] (inc (inc x))))
 
 (def dinc (eval dinc-list))
 
