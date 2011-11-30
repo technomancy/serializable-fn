@@ -25,8 +25,10 @@
   (is (number? (:line (meta (:serializable.fn/source
                              (meta dinc)))))))
 
+(def write+read (comp eval read-string pr-str))
+
 (defn round-trip [f & args]
-  (apply (eval (read-string (pr-str f))) args))
+  (apply (write+read f) args))
 
 (deftest serializable-fn-roundtrip!!!111eleven
   (is (= 2 (round-trip dinc 0))))
@@ -42,3 +44,8 @@
                         (let [y (inc x)]
                           (fn [] y)))
                       10)))))
+
+(deftest roundtrip-twice!
+  (is (= 5
+         ((write+read (write+read (let [x 5]
+                                    (fn [] x))))))))
