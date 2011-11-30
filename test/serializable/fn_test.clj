@@ -3,7 +3,7 @@
   (:use [serializable.fn]
         [clojure.test]))
 
-(def dinc-list '(fn [x] (inc (inc x))))
+(def dinc-list '(serializable.fn/fn [x] (inc (inc x))))
 
 (def dinc (eval dinc-list))
 
@@ -25,16 +25,13 @@
   (is (number? (:line (meta (:serializable.fn/source
                              (meta dinc)))))))
 
+(def write+read (comp eval read-string pr-str))
+
 (defn round-trip [f & args]
-  (apply (eval (read-string (pr-str f))) args))
+  (apply (write+read f) args))
 
 (deftest serializable-fn-roundtrip!!!111eleven
   (is (= 2 (round-trip dinc 0))))
-
-(deftest serializable-roundtrip-with-lexical-context
-  (let [x 0, y (+ 95 4)]
-    (is (= [2 100]
-           (round-trip (fn [] [(dinc x) (inc y)]))))))
 
 (deftest roundtrip-with-lexical-nonconst-context
   (let [x 10, y (inc x)]
@@ -47,3 +44,8 @@
                         (let [y (inc x)]
                           (fn [] y)))
                       10)))))
+
+(deftest roundtrip-twice!
+  (is (= 5
+         ((write+read (write+read (let [x 5]
+                                    (fn [] x))))))))
