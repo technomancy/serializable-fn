@@ -1,6 +1,7 @@
 (ns serializable.fn
   "Serializable functions! Check it out."
-  (:refer-clojure :exclude [fn]))
+  (:refer-clojure :exclude [fn])
+  (:import java.io.Writer))
 
 (defn- save-env [bindings form]
   (let [form (with-meta (cons `fn (rest form)) ; serializable/fn, not core/fn
