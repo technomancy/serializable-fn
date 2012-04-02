@@ -10,12 +10,9 @@ Which is nicer, be honest:
     #<user$eval__1750$fn__1751 user$eval__1750$fn__1751@927e4be>
 
     ;; with serializable-fn
-    user> (use 'serializable.fn)
-    ;; (:refer-clojure :exclude [fn]) to avoid the warning
-    WARNING: fn already refers to: #'clojure.core/fn in namespace: user, being replaced by: #'serializable.fn/fn
-    nil
+    user> (require '[serializable.fn :as s])
 
-    user> (def dinc (fn [x] (inc (inc x))))
+    user> (def dinc (s/fn [x] (inc (inc x))))
     (fn [x] (inc (inc x)))
     user> ((eval (read-string (pr-str dinc))) 0)
     2
@@ -23,6 +20,6 @@ Which is nicer, be honest:
 
 ## License
 
-(c) 2010 Seajure, The Seattle Clojure group
+Copyright © 2010-2012 Seajure, The Seattle Clojure group and contributors
 
 Distributed under the EPL, the same license as Clojure.
