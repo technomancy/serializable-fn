@@ -49,3 +49,6 @@
   (is (= 5
          ((write+read (write+read (let [x 5]
                                     (fn [] x))))))))
+
+(deftest roundtrip-with-lexical-context-with-symbols
+  (is (= 'foo (round-trip (let [x 'foo] (fn [] x))))))
