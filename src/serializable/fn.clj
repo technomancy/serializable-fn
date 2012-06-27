@@ -10,7 +10,10 @@
     (if bindings
       `(list `let ~(vec (apply concat (for [b bindings]
                                         [`(quote ~(.sym b))
-                                         (.sym b)])))
+                                         `(let [s# ~(.sym b)]
+                                            (if (symbol? s#)
+                                              `(quote ~s#)
+                                              s#))])))
              ~quoted-form)
       quoted-form)))
 
