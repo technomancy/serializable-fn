@@ -8,9 +8,10 @@
                (meta form))
         quoted-form `(quote ~form)]
     (if bindings
-      `(list `let ~(vec (apply concat (for [b bindings]
-                                        [`(quote ~(.sym b))
-                                         (.sym b)])))
+      `(list `let ~(vec (apply concat (for [b bindings
+                                            :let [sym (.sym b)]]
+                                        [`(quote ~sym)
+                                         `(list `quote ~sym)])))
              ~quoted-form)
       quoted-form)))
 
