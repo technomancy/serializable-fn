@@ -8,9 +8,10 @@
                (meta form))
         quoted-form `(quote ~form)]
     (if locals
-      `(list `let ~(vec (apply concat (for [local locals]
-                                        [`(quote ~local)
-                                         `(list `quote ~local)])))
+      `(list `let [~@(for [local locals,
+                           let-arg [`(quote ~local)
+                                    `(list `quote ~local)]]
+                       let-arg)]
              ~quoted-form)
       quoted-form)))
 
