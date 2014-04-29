@@ -22,4 +22,5 @@ Which is nicer, be honest:
 
 Copyright © 2010-2012 Seajure, The Seattle Clojure group and contributors
 
-Distributed under the EPL, the same license as Clojure.
+Distributed under the Eclipse Public License 1.0 as well as the Apache
+License 2.0.
