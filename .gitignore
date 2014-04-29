@@ -1,5 +1,7 @@
 pom.xml
 *jar
+*asc
 lib
 classes
+/target
 /.lein-failures
