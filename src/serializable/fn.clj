@@ -3,12 +3,18 @@
   (:refer-clojure :exclude [fn])
   (:import java.io.Writer))
 
-(defn- save-env [locals form]
-  (let [form (with-meta (cons `fn (rest form)) ; serializable/fn, not core/fn
-               (meta form))
+(defn- symbols [sexp]
+  "Returns just the symbols from the expression, including those
+   inside literals (sets, maps, lists, vectors)."
+  (distinct (filter symbol? (tree-seq coll? seq sexp))))
+
+(defn- save-env [env form]
+  (let [used-locals (keys (select-keys env (symbols form)))
+        form (with-meta (cons `fn (rest form)) ; serializable/fn, not core/fn
+                              (meta form))
         quoted-form `(quote ~form)]
-    (if locals
-      `(list `let [~@(for [local locals,
+    (if (seq used-locals)
+      `(list `let [~@(for [local used-locals,
                            let-arg [`(quote ~local)
                                     `(list `quote ~local)]]
                        let-arg)]
@@ -20,7 +26,7 @@
   fn [& sigs]
   `(with-meta (clojure.core/fn ~@sigs)
      {:type ::serializable-fn
-      ::source ~(save-env (keys &env) &form)}))
+      ::source ~(save-env &env &form)}))
 
 (defmethod print-method ::serializable-fn [o ^Writer w]
   (print-method (::source (meta o)) w))
